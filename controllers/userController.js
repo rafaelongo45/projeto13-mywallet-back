@@ -1,4 +1,5 @@
 import joi from "joi"
+import {v4} from "uuid";
 import chalk from "chalk";
 import bcrypt from "bcrypt";
 
@@ -34,6 +35,38 @@ export async function signUp(req, res){
     await db.collection("users").insertOne({name, email, password: passwordHash})
     res.sendStatus(201);
   } catch (e) {
+    console.log(chalk.bold.red("Erro no servidor"), e)
+    res.send(e).status(500);
+  }
+}
+
+export async function logIn(req,res){
+  const {email, password} = req.body;
+
+  const schema = joi.object({
+    email: joi.string().email().required(),
+    password: joi.any().required()
+  });
+
+  const {error, value} = schema.validate({email, password}, {abortEarly:false});
+
+  if(error){
+    res.status(422).send(error.details.map(e => e.message));
+    return 
+  }
+
+  try{
+    const user = await db.collection('users').findOne({email});
+
+    if(user && bcrypt.compareSync(password, user.password)){
+      const token = v4();
+
+      await db.collection("session").insertOne({userId: user._id, token});
+      res.send(token);
+    }else{
+      res.status(404).send("Usuário não encontrado!");
+    }
+  }catch(e){
     console.log(chalk.bold.red("Erro no servidor"), e)
     res.send(e).status(500);
   }

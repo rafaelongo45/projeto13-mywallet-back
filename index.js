@@ -2,7 +2,7 @@ import cors from "cors";
 import chalk from "chalk";
 import dotenv from "dotenv";
 import express from "express";
-import { signUp } from "./controllers/userController.js";
+import { signUp, logIn } from "./controllers/userController.js";
 
 import db from "./db.js";
 
@@ -12,6 +12,8 @@ app.use(cors());
 
 dotenv.config();
 
-app.post("/users", signUp);
+app.post("/signup", signUp);
+
+app.post("/login", logIn);
 
 app.listen(process.env.PORT, () => { console.log(chalk.bold.green("Servidor rodando"))})
