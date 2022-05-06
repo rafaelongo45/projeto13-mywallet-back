@@ -3,7 +3,7 @@ import chalk from "chalk";
 import dotenv from "dotenv";
 import express from "express";
 import { signUp, logIn } from "./controllers/userController.js";
-import { transactions } from "./controllers/operationsController.js";
+import { postTransactions, getTransactions } from "./controllers/operationsController.js";
 
 import db from "./db.js";
 
@@ -17,6 +17,8 @@ app.post("/signup", signUp);
 
 app.post("/login", logIn);
 
-app.post("/transactions", transactions);
+app.post("/transactions", postTransactions);
+
+app.get("/transactions", getTransactions)
 
 app.listen(process.env.PORT, () => { console.log(chalk.bold.green("Servidor rodando"))})
