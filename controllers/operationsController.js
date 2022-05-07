@@ -2,11 +2,11 @@ import joi from "joi";
 import chalk from "chalk";
 
 import db from "../db.js";
+import dayjs from "dayjs";
 
 export async function postTransactions(req,res){
   const { description, amount, type } = req.body;
   const { authorization } = req.headers;
-  console.log(authorization)
 
   const token = authorization?.replace('Bearer', '').trim();
 
@@ -34,9 +34,7 @@ export async function postTransactions(req,res){
 
   try {
     const user = await db.collection("session").findOne({token});
-    console.log(token);
-    console.log(user)
-    await db.collection("transactions").insertOne({description, amount, type, userId: user.userId});
+    await db.collection("transactions").insertOne({description, amount, type, userId: user.userId, date: dayjs().format("DD/MM")});
 
     res.sendStatus(201);
   } catch (e) {
@@ -57,9 +55,7 @@ export async function getTransactions(req,res){
 
   try {
     const user = await db.collection("session").findOne({token});
-    console.log(user)
     const userTransactions = await db.collection("transactions").find({userId:user.userId}).toArray();
-    console.log(userTransactions)
     
     userTransactions.map((transaction) => {
       delete transaction._id

@@ -62,7 +62,9 @@ export async function logIn(req,res){
       const token = v4();
 
       await db.collection("session").insertOne({userId: user._id, token});
-      res.send(token);
+
+      const data = {token, user: user.name}
+      res.send(data);
     }else{
       res.status(404).send("Usuário não encontrado!");
     }
