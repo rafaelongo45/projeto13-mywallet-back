@@ -60,3 +60,16 @@ export async function deleteTransaction(req,res){
     res.send(e).status(500);
   }
 }
+
+export async function updateTransaction(req,res){
+  const {id} = req.params;
+
+  try {
+    await db.collection("transactions").updateOne({_id: ObjectId(id)}, {$set: req.body});
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(chalk.bold.red("Erro no servidor"), e)
+    res.send(e).status(500);
+  }
+
+}
