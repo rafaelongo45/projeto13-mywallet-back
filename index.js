@@ -3,8 +3,8 @@ import chalk from "chalk";
 import dotenv from "dotenv";
 import express from "express";
 
-import userRouter from "../routers/authRouter.js";
-import transactionsRouter from "../routers/operationsRouter.js";
+import userRouter from "./routers/authRouter.js";
+import transactionsRouter from "./routers/operationsRouter.js";
 
 const app = express();
 app.use(express.json());
