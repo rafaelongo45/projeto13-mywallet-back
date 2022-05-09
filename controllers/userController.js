@@ -1,6 +1,7 @@
 import chalk from "chalk";
 
 export async function signUp(req, res){
+  const {name, email,password} = req.body;
   try {
     const passwordHash = bcrypt.hashSync(password, 10)
 
