@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import bcrypt from 'bcrypt';
 
 export async function signUp(req, res){
   const {name, email,password} = req.body;
